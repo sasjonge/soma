@@ -3,6 +3,7 @@ import argparse
 import re
 import os
 import sys
+import subprocess
 from pathlib import Path
 
 
@@ -41,7 +42,7 @@ def _parseHomebrew(fileText):
 
 def makeObjectPropertyQueryFile(objProps, somaPath):
     queryMap = {}
-    queryOwl = './SOMA_QUERY.owl'
+    queryOwl = './queryData/SOMA_QUERY.owl'
     with open(queryOwl, 'w') as outfile:
         outfile.write('Prefix(:=<http://www.ease-crc.org/ont/SOMA_QUERY.owl#>)\n')
         outfile.write('Prefix(dul:=<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>)\n')
@@ -52,7 +53,7 @@ def makeObjectPropertyQueryFile(objProps, somaPath):
         outfile.write('Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)\n')
         outfile.write('Prefix(soma:=<http://www.ease-crc.org/ont/SOMA.owl#>)\n\n\n')
         outfile.write('Ontology(<http://www.ease-crc.org/ont/SOMA_QUERY.owl>\n')
-        outfile.write('Import(<file://%s>)\n' % somaPath)
+        outfile.write('Import(<file://queryData/SOMA-HOME.owl>)\n')
         for k,op in enumerate(objProps):
             cName = 'http://www.ease-crc.org/ont/SOMA_QUERY.owl#QUERY%d' % k
             queryMap[cName] = op
@@ -60,15 +61,16 @@ def makeObjectPropertyQueryFile(objProps, somaPath):
         outfile.write(')\n')
     return queryMap, queryOwl
 
-def runKonclude(queryOwl, koncludePath):
-    outName = queryOwl[:queryOwl.rfind('.')] + '_OUT.html'
-    os.system("%s classification -i %s -o %s >/dev/null 2>&1" % (koncludePath, queryOwl, outName))
+def runKonclude(queryOwl):
+    outName = queryOwl[:queryOwl.rfind('.')] + '_OUT.output'
+    print("docker run -v $GITHUB_WORKSPACE/queryData:$GITHUB_WORKSPACE/queryData --rm konclude/konclude classify -i %s -o %s && ls $GITHUB_WORKSPACE/queryData" % (queryOwl, outName))
+    print(subprocess.check_output("ls $GITHUB_WORKSPACE && cat $GITHUB_WORKSPACE/queryData/SOMA_QUERY.owl", stderr=subprocess.STDOUT, shell=True))
+    print(subprocess.check_output("docker run -v $GITHUB_WORKSPACE/queryData:/queryData --rm konclude/konclude classify -i /queryData/SOMA_QUERY.owl -o /queryData/SOMA_QUERY_OUT.output", stderr=subprocess.STDOUT, shell=True))
     return _parseHomebrew(open(outName).read())
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('konclude_output', help='Konclude output file', type=str)
-    parser.add_argument('-k', '--koncludePath', help='path to Konclude executable', default='./.github/actions/Konclude', type=str)
     parser.add_argument('-s', '--somaPath', help='path to merged SOMA owl', default='./build/SOMA-HOME.owl', type=str)
     parser.add_argument('-p', '--propertyListPath', help='object property list file', default='', type=str)
     parser.add_argument('-o', '--output', help='output file', default='konclude.html', type=str)
@@ -88,7 +90,7 @@ def main():
         objProps = [x.strip() for x in open(args.propertyListPath).read().splitlines() if x.strip()]
     if objProps:
         query2objectProperty, queryOwl = makeObjectPropertyQueryFile(objProps, args.somaPath)
-        nullQueries = runKonclude(queryOwl, args.koncludePath)
+        nullQueries = runKonclude(queryOwl)
         for n in nullQueries:
             if n in query2objectProperty:
                 results['EquivalentObjectProperties'].append(query2objectProperty[n])

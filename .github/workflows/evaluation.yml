@@ -112,16 +112,16 @@ jobs:
              -Dspring-boot.run.arguments="--versionInfo=current \
              --propertyListPath=$PWD/properties"
 
+      - name: Add directory
+        run: mkdir $GITHUB_WORKSPACE/queryData && ls $PWD/build && cp $GITHUB_WORKSPACE/build/owl/current/* $GITHUB_WORKSPACE/queryData
+
       - name: Konclude
-        run: docker run -v $PWD/build:/data --rm konclude/konclude classify -i /data/SOMA-HOME.owl -o /data/konclude.output
+        run: docker run -v $GITHUB_WORKSPACE/queryData:/data --rm konclude/konclude classify -i /data/SOMA-HOME.owl -o /data/konclude.output
 
       - name: Print Konclude output
-        run: cat ./build/konclude.output
+        run: cp $GITHUB_WORKSPACE/queryData/konclude.output ./build/ && cat ./build/konclude.output
         if: always()
 
       - name: Evaluate Konclude output
-        if: success()
-        uses: docker://konclude/konclude
-        with:
-          args: python ./scripts/konclude_test.py -p $PWD/properties/SOMA-HOM_objectProperties -k ./.github/actions/Konclude -s ./build/SOMA-HOME.owl -o ./owl/konclude.html ./build/konclude.output
+        run: python ./scripts/konclude_test.py -p $PWD/properties/SOMA-HOM_objectProperties -s $GITHUB_WORKSPACE/queryData/SOMA-HOME.owl -o ./owl/konclude.html ./build/konclude.output
 
