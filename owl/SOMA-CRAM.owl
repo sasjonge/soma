@@ -1,0 +1,221 @@
+Prefix(:=<http://www.ease-crc.org/ont/SOMA-CRAM.owl#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(SOMA:=<http://www.ease-crc.org/ont/SOMA.owl>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://www.ease-crc.org/ont/SOMA-CRAM.owl>
+Import(<http://www.ease-crc.org/ont/SOMA-ACT.owl>)
+Import(<http://www.ease-crc.org/ont/SOMA-IO.owl>)
+Import(<http://www.ease-crc.org/ont/SOMA-OBJ.owl>)
+Import(<http://www.ease-crc.org/ont/SOMA.owl>)
+
+Declaration(Class(:Action_Designator))
+Declaration(Class(:CRAM_Cognitive_Architecture))
+Declaration(Class(:CRAM_Designator))
+Declaration(Class(:CRAM_Plan))
+Declaration(Class(:CRAM_Plan_Executive))
+Declaration(Class(:CRAM_Plan_Executive_Compiled_Binary))
+Declaration(Class(:CRAM_Plan_Executive_Executable))
+Declaration(Class(:CRAM_Plan_Executive_Software_Instance))
+Declaration(Class(:CRAM_Plan_Step))
+Declaration(Class(:CRAM_plan_language))
+Declaration(Class(:Common_Lisp))
+Declaration(Class(:Generalized_Action_Plan))
+Declaration(Class(:Giskard))
+Declaration(Class(:Giskard_Software_Instance))
+Declaration(Class(:KnowRob))
+Declaration(Class(:KnowRob_Compiled_Binary))
+Declaration(Class(:KnowRob_Executable))
+Declaration(Class(:KnowRob_Software_Instance))
+Declaration(Class(:Location_Designator))
+Declaration(Class(:Object_Designator))
+Declaration(Class(:Plan_Step))
+Declaration(Class(:Primitive_Designator))
+Declaration(Class(:Python))
+Declaration(Class(:RoboKudo))
+Declaration(Class(:SWI_Prolog))
+Declaration(ObjectProperty(:grounds))
+Declaration(ObjectProperty(:is_execution_of))
+Declaration(ObjectProperty(:is_grounded_by))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: :grounds (:grounds)
+
+SubObjectPropertyOf(:grounds <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+InverseObjectProperties(:grounds :is_grounded_by)
+
+# Object Property: :is_execution_of (is execution of)
+
+AnnotationAssertion(rdfs:label :is_execution_of "is execution of"@en)
+SubObjectPropertyOf(:is_execution_of <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+
+# Object Property: :is_grounded_by (is grounded by)
+
+AnnotationAssertion(rdfs:label :is_grounded_by "is grounded by"@en)
+SubObjectPropertyOf(:is_grounded_by <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: :Action_Designator (Action Designator)
+
+AnnotationAssertion(rdfs:label :Action_Designator "Action Designator"^^xsd:string)
+SubClassOf(:Action_Designator :CRAM_Designator)
+
+# Class: :CRAM_Cognitive_Architecture (CRAM Cognitive Architecture)
+
+AnnotationAssertion(rdfs:label :CRAM_Cognitive_Architecture "CRAM Cognitive Architecture"@en)
+SubClassOf(:CRAM_Cognitive_Architecture <http://www.ease-crc.org/ont/SOMA.owl#Software_Configuration>)
+SubClassOf(:CRAM_Cognitive_Architecture ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember> ObjectIntersectionOf(:CRAM_Plan_Executive :Giskard :KnowRob :RoboKudo)))
+
+# Class: :CRAM_Designator (CRAM Designator)
+
+AnnotationAssertion(rdfs:label :CRAM_Designator "CRAM Designator"@en)
+SubClassOf(:CRAM_Designator <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#FormalEntity>)
+SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(:is_execution_of :CRAM_Plan_Step))
+SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(:is_grounded_by ObjectUnionOf(:Giskard :KnowRob :RoboKudo)))
+SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines> :CRAM_Plan_Step))
+
+# Class: :CRAM_Plan (CRAM Plan)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan "CRAM Plan"^^xsd:string)
+SubClassOf(:CRAM_Plan <http://www.ease-crc.org/ont/SOMA.owl#ActionExecutionPlan>)
+SubClassOf(:CRAM_Plan ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isExpressedBy> :Generalized_Action_Plan))
+
+# Class: :CRAM_Plan_Executive (CRAM Plan Executive)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan_Executive "CRAM Plan Executive"@en)
+SubClassOf(:CRAM_Plan_Executive <http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware>)
+SubClassOf(:CRAM_Plan_Executive ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember> :CRAM_Plan_Executive_Compiled_Binary))
+
+# Class: :CRAM_Plan_Executive_Compiled_Binary (CRAM Plan Executive Compiled Binary)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan_Executive_Compiled_Binary "CRAM Plan Executive Compiled Binary"@en)
+SubClassOf(:CRAM_Plan_Executive_Compiled_Binary <http://www.ease-crc.org/ont/SOMA.owl#ExecutableFile>)
+SubClassOf(:CRAM_Plan_Executive_Compiled_Binary ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes> :CRAM_Plan_Executive_Executable))
+
+# Class: :CRAM_Plan_Executive_Executable (CRAM Plan Executive Executable)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan_Executive_Executable "CRAM Plan Executive Executable"@en)
+SubClassOf(:CRAM_Plan_Executive_Executable <http://www.ease-crc.org/ont/SOMA.owl#Executable_Code>)
+SubClassOf(:CRAM_Plan_Executive_Executable ObjectSomeValuesFrom(<http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy> :Common_Lisp))
+
+# Class: :CRAM_Plan_Executive_Software_Instance (CRAM Plan Executive Software Instance)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan_Executive_Software_Instance "CRAM Plan Executive Software Instance"@en)
+SubClassOf(:CRAM_Plan_Executive_Software_Instance <http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance>)
+SubClassOf(:CRAM_Plan_Executive_Software_Instance ObjectAllValuesFrom(<http://www.ease-crc.org/ont/SOMA.owl#isDesignedBy> :CRAM_Plan_Executive))
+SubClassOf(:CRAM_Plan_Executive_Software_Instance ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsThrough> <http://www.ease-crc.org/ont/SOMA-OBJ.owl#ArtificialAgent>))
+
+# Class: :CRAM_Plan_Step (CRAM Plan Step)
+
+AnnotationAssertion(rdfs:label :CRAM_Plan_Step "CRAM Plan Step"^^xsd:string)
+SubClassOf(:CRAM_Plan_Step :Plan_Step)
+
+# Class: :CRAM_plan_language (CRAM Plan Language)
+
+AnnotationAssertion(rdfs:label :CRAM_plan_language "CRAM Plan Language"@en)
+SubClassOf(:CRAM_plan_language :Common_Lisp)
+
+# Class: :Common_Lisp (Common Lisp)
+
+AnnotationAssertion(rdfs:label :Common_Lisp "Common Lisp"@en)
+SubClassOf(:Common_Lisp <http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language>)
+
+# Class: :Generalized_Action_Plan (Generalized Action Plan)
+
+AnnotationAssertion(rdfs:label :Generalized_Action_Plan "Generalized Action Plan"@en)
+SubClassOf(:Generalized_Action_Plan <http://www.ease-crc.org/ont/SOMA.owl#Executable_Code>)
+SubClassOf(:Generalized_Action_Plan ObjectSomeValuesFrom(<http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy> :CRAM_plan_language))
+SubClassOf(:Generalized_Action_Plan ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent> :Action_Designator))
+
+# Class: :Giskard (Giskard)
+
+AnnotationAssertion(rdfs:label :Giskard "Giskard"^^xsd:string)
+SubClassOf(:Giskard <http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware>)
+
+# Class: :Giskard_Software_Instance (:Giskard_Software_Instance)
+
+SubClassOf(:Giskard_Software_Instance <http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance>)
+SubClassOf(:Giskard_Software_Instance ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsFor> :CRAM_Plan_Executive_Software_Instance))
+
+# Class: :KnowRob (KnowRob)
+
+AnnotationAssertion(rdfs:label :KnowRob "KnowRob"^^xsd:string)
+SubClassOf(:KnowRob <http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware>)
+SubClassOf(:KnowRob ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember> :KnowRob_Compiled_Binary))
+
+# Class: :KnowRob_Compiled_Binary (KnowRob Compiled Binary)
+
+AnnotationAssertion(rdfs:label :KnowRob_Compiled_Binary "KnowRob Compiled Binary"@en)
+SubClassOf(:KnowRob_Compiled_Binary <http://www.ease-crc.org/ont/SOMA.owl#ExecutableFile>)
+SubClassOf(:KnowRob_Compiled_Binary ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#realizes> :KnowRob_Executable))
+
+# Class: :KnowRob_Executable (KnowRob Executable)
+
+AnnotationAssertion(rdfs:label :KnowRob_Executable "KnowRob Executable"@en)
+SubClassOf(:KnowRob_Executable <http://www.ease-crc.org/ont/SOMA.owl#Executable_Code>)
+SubClassOf(:KnowRob_Executable ObjectSomeValuesFrom(<http://www.ease-crc.org/ont/SOMA.owl#isGivenMeaningBy> :SWI_Prolog))
+
+# Class: :KnowRob_Software_Instance (KnowRob Software Instance)
+
+AnnotationAssertion(rdfs:label :KnowRob_Software_Instance "KnowRob Software Instance"@en)
+SubClassOf(:KnowRob_Software_Instance <http://www.ease-crc.org/ont/SOMA.owl#SoftwareInstance>)
+SubClassOf(:KnowRob_Software_Instance ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#actsFor> :CRAM_Plan_Executive_Software_Instance))
+
+# Class: :Location_Designator (Location Designator)
+
+AnnotationAssertion(rdfs:label :Location_Designator "Location Designator"^^xsd:string)
+SubClassOf(:Location_Designator :CRAM_Designator)
+
+# Class: :Object_Designator (Object Designator)
+
+AnnotationAssertion(rdfs:label :Object_Designator "Object Designator"^^xsd:string)
+SubClassOf(:Object_Designator :CRAM_Designator)
+
+# Class: :Plan_Step (Plan Step)
+
+AnnotationAssertion(rdfs:label :Plan_Step "Plan Step"@en)
+SubClassOf(:Plan_Step <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan>)
+
+# Class: :Primitive_Designator (Primitive Designator)
+
+AnnotationAssertion(rdfs:label :Primitive_Designator "Primitive Designator"^^xsd:string)
+SubClassOf(:Primitive_Designator :CRAM_Designator)
+
+# Class: :Python (Python)
+
+AnnotationAssertion(rdfs:label :Python "Python"@en)
+SubClassOf(:Python <http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language>)
+
+# Class: :RoboKudo (RoboKudo)
+
+AnnotationAssertion(rdfs:label :RoboKudo "RoboKudo"@en)
+SubClassOf(:RoboKudo <http://www.ease-crc.org/ont/SOMA.owl#ExecutableSoftware>)
+
+# Class: :SWI_Prolog (SWI Prolog)
+
+AnnotationAssertion(rdfs:label :SWI_Prolog "SWI Prolog"@en)
+SubClassOf(:SWI_Prolog <http://www.ease-crc.org/ont/SOMA.owl#Human-readable_Programming_Language>)
+
+# Class: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action> (Action)
+
+SubClassOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action> ObjectSomeValuesFrom(:is_execution_of :Plan_Step))
+
+# Class: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan> (Plan)
+
+SubClassOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan> ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent> :Plan_Step))
+
+
+)
