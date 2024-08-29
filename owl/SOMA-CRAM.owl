@@ -15,18 +15,23 @@ Import(<http://www.ease-crc.org/ont/SOMA-OBJ.owl>)
 Import(<http://www.ease-crc.org/ont/SOMA.owl>)
 
 Declaration(Class(:Action_Designator))
+Declaration(Class(:Action_Designator_Design))
 Declaration(Class(:CRAM_Cognitive_Architecture))
 Declaration(Class(:CRAM_Designator))
 Declaration(Class(:CRAM_Plan))
-Declaration(Class(:CRAM_Plan_Step))
+Declaration(Class(:Designator))
+Declaration(Class(:Designator_Design))
 Declaration(Class(:Designator_Field))
 Declaration(Class(:KeyValuePair))
 Declaration(Class(:Location_Designator))
+Declaration(Class(:Location_Designator_Design))
 Declaration(Class(:Motion_Designator))
+Declaration(Class(:Motion_Designator_Design))
 Declaration(Class(:Object_Designator))
-Declaration(Class(:Plan_Step))
+Declaration(Class(:Object_Designator_Design))
+Declaration(Class(:Referential_Clause))
 Declaration(Class(<http://www.ease-crc.org/ont/SOMA-OBJ.owl#ArtificialAgent>))
-Declaration(ObjectProperty(:is_execution_of))
+Declaration(ObjectProperty(:expresses_description_of))
 Declaration(ObjectProperty(:resolved_from))
 Declaration(ObjectProperty(:resolved_to))
 Declaration(DataProperty(:hasKey))
@@ -35,10 +40,10 @@ Declaration(DataProperty(:hasKey))
 #   Object Properties
 ############################
 
-# Object Property: :is_execution_of (is execution of)
+# Object Property: :expresses_description_of (expresses description of)
 
-AnnotationAssertion(rdfs:label :is_execution_of "is execution of"@en)
-SubObjectPropertyOf(:is_execution_of <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
+AnnotationAssertion(rdfs:label :expresses_description_of "expresses description of"@en)
+SubObjectPropertyOf(:expresses_description_of <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#associatedWith>)
 
 # Object Property: :resolved_from (:resolved_from)
 
@@ -68,6 +73,13 @@ SubDataPropertyOf(:hasKey <http://www.ease-crc.org/ont/SOMA.owl#hasPersistentIde
 
 AnnotationAssertion(rdfs:label :Action_Designator "Action Designator"^^xsd:string)
 SubClassOf(:Action_Designator :CRAM_Designator)
+SubClassOf(:Action_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> :Action_Designator_Design))
+
+# Class: :Action_Designator_Design (Action Designator Design)
+
+AnnotationAssertion(rdfs:label :Action_Designator_Design "Action Designator Design"@en)
+SubClassOf(:Action_Designator_Design :Designator_Design)
+SubClassOf(:Action_Designator_Design ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action>))
 
 # Class: :CRAM_Cognitive_Architecture (CRAM Cognitive Architecture)
 
@@ -77,22 +89,24 @@ SubClassOf(:CRAM_Cognitive_Architecture <http://www.ease-crc.org/ont/SOMA.owl#So
 # Class: :CRAM_Designator (CRAM Designator)
 
 AnnotationAssertion(rdfs:label :CRAM_Designator "CRAM Designator"@en)
-SubClassOf(:CRAM_Designator <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Description>)
-SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(:is_execution_of :CRAM_Plan_Step))
+SubClassOf(:CRAM_Designator :Designator)
 SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(:resolved_to :CRAM_Designator))
-SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#defines> :CRAM_Plan_Step))
 SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember> :Designator_Field))
-SubClassOf(:CRAM_Designator ObjectAllValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasConstituent> :CRAM_Designator))
 
 # Class: :CRAM_Plan (CRAM Plan)
 
 AnnotationAssertion(rdfs:label :CRAM_Plan "CRAM Plan"^^xsd:string)
 SubClassOf(:CRAM_Plan <http://www.ease-crc.org/ont/SOMA.owl#ActionExecutionPlan>)
 
-# Class: :CRAM_Plan_Step (CRAM Plan Step)
+# Class: :Designator (:Designator)
 
-AnnotationAssertion(rdfs:label :CRAM_Plan_Step "CRAM Plan Step"^^xsd:string)
-SubClassOf(:CRAM_Plan_Step :Plan_Step)
+AnnotationAssertion(rdfs:comment :Designator "Designator"@en)
+SubClassOf(:Designator <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject>)
+
+# Class: :Designator_Design (Designator Design)
+
+AnnotationAssertion(rdfs:label :Designator_Design "Designator Design"@en)
+SubClassOf(:Designator_Design <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>)
 
 # Class: :Designator_Field (:Designator_Field)
 
@@ -107,29 +121,43 @@ SubClassOf(:KeyValuePair <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#
 
 AnnotationAssertion(rdfs:label :Location_Designator "Location Designator"^^xsd:string)
 SubClassOf(:Location_Designator :CRAM_Designator)
+SubClassOf(:Location_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> :Location_Designator_Design))
+
+# Class: :Location_Designator_Design (Location Designator Design)
+
+AnnotationAssertion(rdfs:label :Location_Designator_Design "Location Designator Design"@en)
+SubClassOf(:Location_Designator_Design :Designator_Design)
+SubClassOf(:Location_Designator_Design ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes> <http://www.ease-crc.org/ont/SOMA.owl#Location>))
 
 # Class: :Motion_Designator (Motion Designator)
 
 AnnotationAssertion(rdfs:label :Motion_Designator "Motion Designator"^^xsd:string)
 SubClassOf(:Motion_Designator :CRAM_Designator)
+SubClassOf(:Motion_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> :Motion_Designator_Design))
+
+# Class: :Motion_Designator_Design (Motion Designator Design)
+
+AnnotationAssertion(rdfs:label :Motion_Designator_Design "Motion Designator Design"@en)
+SubClassOf(:Motion_Designator_Design :Designator_Design)
+SubClassOf(:Motion_Designator_Design ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes> <http://www.ease-crc.org/ont/SOMA.owl#Motion>))
 
 # Class: :Object_Designator (Object Designator)
 
 AnnotationAssertion(rdfs:label :Object_Designator "Object Designator"^^xsd:string)
 SubClassOf(:Object_Designator :CRAM_Designator)
+SubClassOf(:Object_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> :Object_Designator_Design))
 
-# Class: :Plan_Step (Plan Step)
+# Class: :Object_Designator_Design (Object Designator Design)
 
-AnnotationAssertion(rdfs:label :Plan_Step "Plan Step"@en)
-SubClassOf(:Plan_Step <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan>)
+AnnotationAssertion(rdfs:label :Object_Designator_Design "Object Designator Design"@en)
+SubClassOf(:Object_Designator_Design :Designator_Design)
+SubClassOf(:Object_Designator_Design ObjectExactCardinality(1 <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject>))
 
-# Class: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action> (Action)
+# Class: :Referential_Clause (Referential Clause)
 
-SubClassOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Action> ObjectSomeValuesFrom(:is_execution_of :Action_Designator))
-
-# Class: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan> (Plan)
-
-SubClassOf(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Plan> ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasComponent> :Plan_Step))
+AnnotationAssertion(rdfs:label :Referential_Clause "Referential Clause"@en)
+SubClassOf(:Referential_Clause <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#InformationObject>)
 
 
+SubObjectPropertyOf(ObjectPropertyChain(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#expresses> <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#describes>) :expresses_description_of)
 )
