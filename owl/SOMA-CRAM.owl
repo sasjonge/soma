@@ -21,8 +21,6 @@ Declaration(Class(:CRAM_Designator))
 Declaration(Class(:CRAM_Plan))
 Declaration(Class(:Designator))
 Declaration(Class(:Designator_Design))
-Declaration(Class(:Designator_Field))
-Declaration(Class(:KeyValuePair))
 Declaration(Class(:Location_Designator))
 Declaration(Class(:Location_Designator_Design))
 Declaration(Class(:Motion_Designator))
@@ -91,7 +89,6 @@ SubClassOf(:CRAM_Cognitive_Architecture <http://www.ease-crc.org/ont/SOMA.owl#So
 AnnotationAssertion(rdfs:label :CRAM_Designator "CRAM Designator"@en)
 SubClassOf(:CRAM_Designator :Designator)
 SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(:resolved_to :CRAM_Designator))
-SubClassOf(:CRAM_Designator ObjectSomeValuesFrom(<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasMember> :Designator_Field))
 
 # Class: :CRAM_Plan (CRAM Plan)
 
@@ -107,15 +104,6 @@ SubClassOf(:Designator <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#In
 
 AnnotationAssertion(rdfs:label :Designator_Design "Designator Design"@en)
 SubClassOf(:Designator_Design <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Design>)
-
-# Class: :Designator_Field (:Designator_Field)
-
-SubClassOf(:Designator_Field :KeyValuePair)
-SubClassOf(:Designator_Field DataSomeValuesFrom(:hasKey xsd:string))
-
-# Class: :KeyValuePair (:KeyValuePair)
-
-SubClassOf(:KeyValuePair <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#FormalEntity>)
 
 # Class: :Location_Designator (Location Designator)
 
